@@ -1,0 +1,83 @@
+﻿@model IEnumerable<ArmyTechTask.Models.Student>
+
+@{
+    ViewBag.Title = "All Students";
+}
+
+<h2> @ViewBag.Title</h2>
+<hr />
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BirthDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Field)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Governorate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Neighborhood)
+        </th>
+        <th>
+            Action
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr id="id-@item.ID">
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BirthDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Field.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Governorate.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Neighborhood.Name)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID }, new { @class = "btn btn-success" })
+                <a onclick="ConfirmDelete(@item.ID)" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+<p>
+    @Html.ActionLink("Add Student", "Create",null ,new { @class = "btn btn-primary" })
+</p>
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script>
+    function ConfirmDelete(id) {
+        let result = confirm("Are You Sure");
+        if (result) {
+            $.ajax({
+                url: `/Student/Delete/${id}`,
+                type: "Get",
+                success: function (data) {
+                    if (data) {
+                        let element = document.getElementById(`id-${id}`);
+                        element.remove();
+                    }
+                },
+                error: function (err) {
+                    alert("Error while deleting data");
+                }
+            });
+        }
+    }
+</script>
